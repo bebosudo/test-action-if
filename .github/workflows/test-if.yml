@@ -63,7 +63,9 @@ jobs:
               github.event.issue.pull_request &&
               github.event.issue.state == 'open'
           }}
-        run: echo hello
+        run: |
+          echo "${{ toJson(github.event.comment.body) }}"
+          echo "${{ endsWith(toJson(github.event.comment.body), '\r\n/deploy') }}"
 
       - name: Use angle bracket and dash issue with deploy kw
         if: >-
