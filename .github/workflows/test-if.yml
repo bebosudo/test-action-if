@@ -65,7 +65,7 @@ jobs:
           }}
         run: |
           echo "${{ toJson(github.event.comment.body) }}"
-          echo "${{ endsWith(toJson(github.event.comment.body), '\r\n/deploy') }}"
+          echo "${{ endsWith(toJson(github.event.comment.body), '\r\n/deploy"') }}"
 
       - name: Use angle bracket and dash issue with deploy kw
         if: >-
@@ -75,9 +75,9 @@ jobs:
             github.event.issue.state == 'open' &&
             (
               (github.event.comment.body == '/deploy') ||
-              startsWith(toJson(github.event.comment.body), '/deploy\r\n') ||
+              startsWith(toJson(github.event.comment.body), '"/deploy\r\n') ||
               contains(toJson(github.event.comment.body), '\r\n/deploy\r\n') ||
-              endsWith(toJson(github.event.comment.body), '\r\n/deploy')
+              endsWith(toJson(github.event.comment.body), '\r\n/deploy"')
             )
           }}
         run: echo hello
@@ -91,9 +91,9 @@ jobs:
               (
                 (
                   (github.event.comment.body == '/deploy') ||
-                  startsWith(toJson(github.event.comment.body), '/deploy\r\n') ||
+                  startsWith(toJson(github.event.comment.body), '"/deploy\r\n') ||
                   contains(toJson(github.event.comment.body), '\r\n/deploy\r\n') ||
-                  endsWith(toJson(github.event.comment.body), '\r\n/deploy')
+                  endsWith(toJson(github.event.comment.body), '\r\n/deploy"')
                 )
                 ||
                 (
