@@ -1,8 +1,8 @@
 name: test if
 
 on:
-  push:
-    branches: [ main ]
+  issue_comment:
+    types: [created]
 
 jobs:
   test-if:
@@ -41,17 +41,69 @@ jobs:
       - name: ... but not will not
         if: "${{ github.actor == 'bebosudo1' && github.event_name == 'push' }} "
         run: echo hello
-      - name: Trim will skip
+      - name: Use angle bracket and dash
         if: >-
           ${{
             github.actor == 'bebosudo' &&
             github.event_name == 'push'
           }}
         run: echo hello
-      - name: Even in literal mode
+      - name: Use pipe and dash
         if: |-
           ${{
             github.actor == 'bebosudo' &&
             github.event_name == 'push'
+          }}
+        run: echo hello
+
+      - name: Use angle bracket and dash just issue
+        if: >-
+          ${{
+              github.event_name == 'issue_comment' &&
+              github.event.issue.pull_request &&
+              github.event.issue.state == 'open'
+          }}
+        run: echo hello
+
+      - name: Use angle bracket and dash issue with deploy kw
+        if: >-
+          ${{
+            github.event_name == 'issue_comment' &&
+            github.event.issue.pull_request &&
+            github.event.issue.state == 'open' &&
+            (
+              (github.event.comment.body == '/deploy') ||
+              startsWith(toJson(github.event.comment.body), '/deploy\r\n') ||
+              contains(toJson(github.event.comment.body), '\r\n/deploy\r\n') ||
+              endsWith(toJson(github.event.comment.body), '\r\n/deploy')
+            )
+          }}
+        run: echo hello
+
+      - name: Use angle bracket and dash issue deploy kw or rebuild with label
+        if: >-
+          ${{
+              github.event_name == 'issue_comment' &&
+              github.event.issue.pull_request &&
+              github.event.issue.state == 'open' &&
+              (
+                (
+                  (github.event.comment.body == '/deploy') ||
+                  startsWith(toJson(github.event.comment.body), '/deploy\r\n') ||
+                  contains(toJson(github.event.comment.body), '\r\n/deploy\r\n') ||
+                  endsWith(toJson(github.event.comment.body), '\r\n/deploy')
+                )
+                ||
+                (
+                  contains(github.event.issue.labels.*.name, 'bug')
+                  &&
+                  (
+                    (github.event.comment.body == '/rebuild') ||
+                    startsWith(toJson(github.event.comment.body), '/rebuild\r\n') ||
+                    contains(toJson(github.event.comment.body), '\r\n/rebuild\r\n') ||
+                    endsWith(toJson(github.event.comment.body), '\r\n/rebuild')
+                  )
+                )
+              )
           }}
         run: echo hello
