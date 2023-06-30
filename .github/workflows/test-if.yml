@@ -44,14 +44,14 @@ jobs:
       - name: Trim will skip
         if: >-
           ${{
-            github.actor == 'bebosudo1' &&
+            github.actor == 'bebosudo' &&
             github.event_name == 'push'
           }}
         run: echo hello
       - name: Even in literal mode
         if: |-
           ${{
-            github.actor == 'bebosudo1' &&
+            github.actor == 'bebosudo' &&
             github.event_name == 'push'
           }}
         run: echo hello
